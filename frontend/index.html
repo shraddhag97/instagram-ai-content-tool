@@ -11,28 +11,39 @@
 
 <h1 class="text-2xl font-bold mb-4">Instagram AI Content Generator</h1>
 
-<label>Niche Preset</label>
-<select id="preset" class="w-full border p-2 mb-2 rounded" onchange="applyPreset()">
-<option value="">Custom</option>
+<label>Niche</label>
+<select id="nicheSelect" class="w-full border p-2 mb-3 rounded" onchange="handleCustomNiche()">
 <option value="fitness">Fitness</option>
 <option value="fashion">Fashion</option>
 <option value="travel">Travel</option>
 <option value="food">Food</option>
 <option value="business">Business</option>
+<option value="technology">Technology</option>
+<option value="education">Education</option>
+<option value="finance">Finance</option>
+<option value="custom">Other (Custom)</option>
 </select>
 
-<label>Niche</label>
-<input id="niche" class="w-full border p-2 mb-3 rounded" placeholder="fitness">
+<input id="customNiche"
+class="w-full border p-2 mb-3 rounded hidden"
+placeholder="Enter your niche">
 
 <label>Topic</label>
 <input id="topic" class="w-full border p-2 mb-3 rounded" placeholder="daily workout">
 
 <label>Tone</label>
 <select id="tone" class="w-full border p-2 mb-4 rounded">
-<option value="motivational">motivational</option>
-<option value="funny">funny</option>
-<option value="inspirational">inspirational</option>
-<option value="professional">professional</option>
+<option value="motivational">Motivational</option>
+<option value="funny">Funny</option>
+<option value="inspirational">Inspirational</option>
+<option value="professional">Professional</option>
+<option value="educational">Educational</option>
+<option value="storytelling">Storytelling</option>
+<option value="casual">Casual</option>
+<option value="luxury">Luxury</option>
+<option value="bold">Bold</option>
+<option value="friendly">Friendly</option>
+<option value="persuasive">Persuasive</option>
 </select>
 
 <button id="captionBtn" onclick="generateCaption()" class="bg-blue-600 text-white w-full p-3 rounded mb-2">
@@ -48,6 +59,7 @@ Generate Content Calendar
 </button>
 
 <h3 class="font-semibold mb-2">Result</h3>
+
 <div id="result" class="bg-gray-100 p-4 rounded min-h-[120px]"></div>
 
 <button onclick="regenerate()" class="bg-yellow-500 text-white w-full p-3 rounded mt-3">
@@ -78,11 +90,23 @@ document.getElementById("reelBtn"),
 document.getElementById("calendarBtn")
 ]
 
-function applyPreset(){
-const preset = document.getElementById("preset").value
-if(preset){
-document.getElementById("niche").value = preset
+function handleCustomNiche(){
+const select = document.getElementById("nicheSelect").value
+const customField = document.getElementById("customNiche")
+
+if(select === "custom"){
+customField.classList.remove("hidden")
+}else{
+customField.classList.add("hidden")
 }
+}
+
+function getNiche(){
+let niche = document.getElementById("nicheSelect").value
+if(niche === "custom"){
+niche = document.getElementById("customNiche").value
+}
+return niche
 }
 
 function disableButtons(){
@@ -127,7 +151,7 @@ lastAction = generateCaption
 disableButtons()
 showLoading()
 
-const niche = document.getElementById("niche").value
+const niche = getNiche()
 const topic = document.getElementById("topic").value
 const tone = document.getElementById("tone").value
 
@@ -154,7 +178,7 @@ lastAction = generateReel
 disableButtons()
 showLoading()
 
-const niche = document.getElementById("niche").value
+const niche = getNiche()
 const topic = document.getElementById("topic").value
 const tone = document.getElementById("tone").value
 
@@ -181,7 +205,7 @@ lastAction = generateCalendar
 disableButtons()
 showLoading()
 
-const niche = document.getElementById("niche").value
+const niche = getNiche()
 const topic = document.getElementById("topic").value
 const tone = document.getElementById("tone").value
 
