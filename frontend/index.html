@@ -72,7 +72,8 @@ tone:tone
 
 const data = await response.json()
 
-document.getElementById("result").innerText = data.caption
+document.getElementById("result").innerText =
+    data.caption || data.reel_script || data.calendar || JSON.stringify(data)
 
 async function generateReel(){
 
@@ -94,7 +95,8 @@ tone:tone
 
 const data = await response.json()
 
-document.getElementById("result").innerText = data.caption
+document.getElementById("result").innerText =
+    data.caption || data.reel_script || data.calendar || JSON.stringify(data)
 
 async function generateCalendar(){
 
@@ -116,8 +118,9 @@ tone:tone
 
 const data = await response.json()
 
-document.getElementById("result").innerText = data.caption
-
+document.getElementById("result").innerText =
+    data.caption || data.reel_script || data.calendar || JSON.stringify(data)
+    
 function copyResult(){
 
 const text = document.getElementById("result").innerText
