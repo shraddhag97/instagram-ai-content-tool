@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Instagram AI Content Generator</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<title>Instagram AI Content Generator</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-gray-100">
@@ -47,7 +47,6 @@ Copy Result
 
 </div>
 
-
 <script>
 
 const API_URL = "https://instagram-ai-content-tool.onrender.com"
@@ -73,7 +72,10 @@ tone:tone
 const data = await response.json()
 
 document.getElementById("result").innerText =
-    data.caption || data.reel_script || data.calendar || JSON.stringify(data)
+data.caption || JSON.stringify(data)
+
+}
+
 
 async function generateReel(){
 
@@ -96,7 +98,10 @@ tone:tone
 const data = await response.json()
 
 document.getElementById("result").innerText =
-    data.caption || data.reel_script || data.calendar || JSON.stringify(data)
+data.reel_script || JSON.stringify(data)
+
+}
+
 
 async function generateCalendar(){
 
@@ -119,8 +124,11 @@ tone:tone
 const data = await response.json()
 
 document.getElementById("result").innerText =
-    data.caption || data.reel_script || data.calendar || JSON.stringify(data)
-    
+data.calendar || JSON.stringify(data)
+
+}
+
+
 function copyResult(){
 
 const text = document.getElementById("result").innerText
