@@ -3,7 +3,8 @@
 const API_URL = "https://instagram-ai-content-tool.onrender.com"
 
 function showLoading(){
-    document.getElementById("result").innerText = "Generating content... ⏳"
+    const resultBox = document.getElementById("result")
+    resultBox.innerText = "Generating content... ⏳"
 }
 
 function clearResult(){
@@ -15,11 +16,11 @@ async function generateCaption(){
 clearResult()
 showLoading()
 
+await new Promise(resolve => setTimeout(resolve, 50))
+
 const niche = document.getElementById("niche").value
 const topic = document.getElementById("topic").value
 const tone = document.getElementById("tone").value
-
-try{
 
 const response = await fetch(`${API_URL}/generate_caption`,{
 method:"POST",
@@ -38,12 +39,6 @@ const data = await response.json()
 document.getElementById("result").innerText =
 data.caption || JSON.stringify(data)
 
-}catch(error){
-
-document.getElementById("result").innerText = "Something went wrong."
-
-}
-
 }
 
 
@@ -52,11 +47,11 @@ async function generateReel(){
 clearResult()
 showLoading()
 
+await new Promise(resolve => setTimeout(resolve, 50))
+
 const niche = document.getElementById("niche").value
 const topic = document.getElementById("topic").value
 const tone = document.getElementById("tone").value
-
-try{
 
 const response = await fetch(`${API_URL}/generate_reel`,{
 method:"POST",
@@ -75,12 +70,6 @@ const data = await response.json()
 document.getElementById("result").innerText =
 data.reel_script || JSON.stringify(data)
 
-}catch(error){
-
-document.getElementById("result").innerText = "Something went wrong."
-
-}
-
 }
 
 
@@ -89,11 +78,11 @@ async function generateCalendar(){
 clearResult()
 showLoading()
 
+await new Promise(resolve => setTimeout(resolve, 50))
+
 const niche = document.getElementById("niche").value
 const topic = document.getElementById("topic").value
 const tone = document.getElementById("tone").value
-
-try{
 
 const response = await fetch(`${API_URL}/generate_calendar`,{
 method:"POST",
@@ -111,12 +100,6 @@ const data = await response.json()
 
 document.getElementById("result").innerText =
 data.calendar || JSON.stringify(data)
-
-}catch(error){
-
-document.getElementById("result").innerText = "Something went wrong."
-
-}
 
 }
 
