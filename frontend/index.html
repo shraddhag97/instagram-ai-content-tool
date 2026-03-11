@@ -25,15 +25,15 @@
 <option value="professional">professional</option>
 </select>
 
-<button onclick="generateCaption()" class="bg-blue-600 text-white w-full p-3 rounded mb-2">
+<button id="captionBtn" onclick="generateCaption()" class="bg-blue-600 text-white w-full p-3 rounded mb-2">
 Generate Caption
 </button>
 
-<button onclick="generateReel()" class="bg-purple-600 text-white w-full p-3 rounded mb-2">
+<button id="reelBtn" onclick="generateReel()" class="bg-purple-600 text-white w-full p-3 rounded mb-2">
 Generate Reel Script
 </button>
 
-<button onclick="generateCalendar()" class="bg-green-600 text-white w-full p-3 rounded mb-4">
+<button id="calendarBtn" onclick="generateCalendar()" class="bg-green-600 text-white w-full p-3 rounded mb-4">
 Generate Content Calendar
 </button>
 
@@ -41,7 +41,11 @@ Generate Content Calendar
 
 <div id="result" class="bg-gray-100 p-4 rounded min-h-[120px]"></div>
 
-<button onclick="copyResult()" class="bg-gray-800 text-white w-full p-3 rounded mt-4">
+<button onclick="regenerate()" class="bg-yellow-500 text-white w-full p-3 rounded mt-3">
+Regenerate
+</button>
+
+<button onclick="copyResult()" class="bg-gray-800 text-white w-full p-3 rounded mt-3">
 Copy Result
 </button>
 
@@ -51,13 +55,39 @@ Copy Result
 
 const API_URL = "https://instagram-ai-content-tool.onrender.com"
 
-function setLoading(){
-document.getElementById("result").innerText = "Generating content... ⏳"
+let lastAction = null
+
+const buttons = [
+document.getElementById("captionBtn"),
+document.getElementById("reelBtn"),
+document.getElementById("calendarBtn")
+]
+
+function disableButtons(){
+buttons.forEach(btn => btn.disabled = true)
+}
+
+function enableButtons(){
+buttons.forEach(btn => btn.disabled = false)
+}
+
+function showLoading(){
+document.getElementById("result").innerHTML =
+`<div class="flex items-center gap-2">
+<div class="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-800"></div>
+<span>Generating content...</span>
+</div>`
+}
+
+function formatText(text){
+return text.replace(/\n/g,"<br>")
 }
 
 async function generateCaption(){
 
-setLoading()
+lastAction = generateCaption
+disableButtons()
+showLoading()
 
 const niche = document.getElementById("niche").value
 const topic = document.getElementById("topic").value
@@ -71,14 +101,18 @@ body:JSON.stringify({ niche, topic, tone })
 
 const data = await response.json()
 
-document.getElementById("result").innerText =
-data.caption || JSON.stringify(data)
+document.getElementById("result").innerHTML =
+formatText(data.caption || JSON.stringify(data))
+
+enableButtons()
 
 }
 
 async function generateReel(){
 
-setLoading()
+lastAction = generateReel
+disableButtons()
+showLoading()
 
 const niche = document.getElementById("niche").value
 const topic = document.getElementById("topic").value
@@ -92,14 +126,18 @@ body:JSON.stringify({ niche, topic, tone })
 
 const data = await response.json()
 
-document.getElementById("result").innerText =
-data.reel_script || JSON.stringify(data)
+document.getElementById("result").innerHTML =
+formatText(data.reel_script || JSON.stringify(data))
+
+enableButtons()
 
 }
 
 async function generateCalendar(){
 
-setLoading()
+lastAction = generateCalendar
+disableButtons()
+showLoading()
 
 const niche = document.getElementById("niche").value
 const topic = document.getElementById("topic").value
@@ -113,9 +151,17 @@ body:JSON.stringify({ niche, topic, tone })
 
 const data = await response.json()
 
-document.getElementById("result").innerText =
-data.calendar || JSON.stringify(data)
+document.getElementById("result").innerHTML =
+formatText(data.calendar || JSON.stringify(data))
 
+enableButtons()
+
+}
+
+function regenerate(){
+if(lastAction){
+lastAction()
+}
 }
 
 function copyResult(){
