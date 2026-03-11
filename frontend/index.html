@@ -47,15 +47,15 @@ placeholder="Enter your niche">
 </select>
 
 <button id="captionBtn" onclick="generateCaption()" class="bg-blue-600 text-white w-full p-3 rounded mb-2">
-Generate Caption
+Generate Caption + Hook + CTA + Hashtags
 </button>
 
 <button id="reelBtn" onclick="generateReel()" class="bg-purple-600 text-white w-full p-3 rounded mb-2">
-Generate Reel Script
+Generate Reel Script + Hook + CTA
 </button>
 
 <button id="calendarBtn" onclick="generateCalendar()" class="bg-green-600 text-white w-full p-3 rounded mb-4">
-Generate Content Calendar
+Generate Weekly Content Calendar
 </button>
 
 <h3 class="font-semibold mb-2">Result</h3>
@@ -70,7 +70,9 @@ Regenerate
 Copy Result
 </button>
 
-<button onclick="downloadCSV()" class="bg-teal-600 text-white w-full p-3 rounded mt-3">
+<button id="downloadBtn"
+onclick="downloadCSV()"
+class="bg-teal-600 text-white w-full p-3 rounded mt-3 hidden">
 Download Calendar CSV
 </button>
 
@@ -91,6 +93,7 @@ document.getElementById("calendarBtn")
 ]
 
 function handleCustomNiche(){
+
 const select = document.getElementById("nicheSelect").value
 const customField = document.getElementById("customNiche")
 
@@ -99,14 +102,19 @@ customField.classList.remove("hidden")
 }else{
 customField.classList.add("hidden")
 }
+
 }
 
 function getNiche(){
+
 let niche = document.getElementById("nicheSelect").value
+
 if(niche === "custom"){
 niche = document.getElementById("customNiche").value
 }
+
 return niche
+
 }
 
 function disableButtons(){
@@ -118,11 +126,13 @@ buttons.forEach(btn => btn.disabled = false)
 }
 
 function showLoading(){
+
 document.getElementById("result").innerHTML =
 `<div class="flex items-center gap-2">
 <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-800"></div>
 <span>Generating content...</span>
 </div>`
+
 }
 
 function formatText(text){
@@ -130,26 +140,38 @@ return text.replace(/\n/g,"<br>")
 }
 
 function saveHistory(text){
+
 let history = JSON.parse(localStorage.getItem("history") || "[]")
+
 history.unshift(text)
 history = history.slice(0,5)
+
 localStorage.setItem("history", JSON.stringify(history))
+
 renderHistory()
+
 }
 
 function renderHistory(){
+
 const history = JSON.parse(localStorage.getItem("history") || "[]")
+
 const container = document.getElementById("history")
+
 container.innerHTML = history.map(item =>
 `<div class="border p-2 rounded mt-2">${item.substring(0,120)}...</div>`
 ).join("")
+
 }
 
 async function generateCaption(){
 
 lastAction = generateCaption
+
 disableButtons()
 showLoading()
+
+document.getElementById("downloadBtn").classList.add("hidden")
 
 const niche = getNiche()
 const topic = document.getElementById("topic").value
@@ -170,13 +192,17 @@ document.getElementById("result").innerHTML = formatText(caption)
 saveHistory(caption)
 
 enableButtons()
+
 }
 
 async function generateReel(){
 
 lastAction = generateReel
+
 disableButtons()
 showLoading()
+
+document.getElementById("downloadBtn").classList.add("hidden")
 
 const niche = getNiche()
 const topic = document.getElementById("topic").value
@@ -197,11 +223,13 @@ document.getElementById("result").innerHTML = formatText(text)
 saveHistory(text)
 
 enableButtons()
+
 }
 
 async function generateCalendar(){
 
 lastAction = generateCalendar
+
 disableButtons()
 showLoading()
 
@@ -223,7 +251,10 @@ document.getElementById("result").innerHTML = formatText(text)
 
 saveHistory(text)
 
+document.getElementById("downloadBtn").classList.remove("hidden")
+
 enableButtons()
+
 }
 
 function regenerate(){
@@ -233,9 +264,13 @@ lastAction()
 }
 
 function copyResult(){
+
 const text = document.getElementById("result").innerText
+
 navigator.clipboard.writeText(text)
+
 alert("Copied to clipboard!")
+
 }
 
 function downloadCSV(){
@@ -248,9 +283,11 @@ return
 const text = document.getElementById("result").innerText
 
 const rows = text.split("\n").map(line => `"${line.replace(/"/g,'""')}"`)
+
 const csv = rows.join("\n")
 
 const blob = new Blob([csv], { type: "text/csv" })
+
 const url = window.URL.createObjectURL(blob)
 
 const a = document.createElement("a")
