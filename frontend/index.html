@@ -240,7 +240,13 @@ alert("Copied to clipboard!")
 
 function downloadCSV(){
 
+if(lastAction !== generateCalendar){
+alert("Please generate a Content Calendar first.")
+return
+}
+
 const text = document.getElementById("result").innerText
+
 const rows = text.split("\n").map(line => `"${line.replace(/"/g,'""')}"`)
 const csv = rows.join("\n")
 
