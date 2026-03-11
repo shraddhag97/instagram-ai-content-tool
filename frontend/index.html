@@ -1,78 +1,69 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-<title>Instagram AI Content Tool</title>
-<script src="https://cdn.tailwindcss.com"></script>
+    <title>Instagram AI Content Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-gray-100">
 
-<div class="max-w-2xl mx-auto mt-20 bg-white p-8 rounded-xl shadow">
+<div class="max-w-xl mx-auto mt-10 bg-white p-6 rounded-xl shadow">
 
-<h1 class="text-2xl font-bold mb-6">Instagram AI Content Generator</h1>
+<h1 class="text-2xl font-bold mb-4">Instagram AI Content Generator</h1>
 
-<label class="block mb-2 font-medium">Niche</label>
-<input id="niche" class="w-full border p-2 rounded mb-4" placeholder="fitness">
+<label>Niche</label>
+<input id="niche" class="w-full border p-2 mb-3 rounded" placeholder="fitness">
 
-<label class="block mb-2 font-medium">Topic</label>
-<input id="topic" class="w-full border p-2 rounded mb-4" placeholder="morning workout motivation">
+<label>Topic</label>
+<input id="topic" class="w-full border p-2 mb-3 rounded" placeholder="daily workout">
 
-<label class="block mb-2 font-medium">Tone</label>
-<select id="tone" class="w-full border p-2 rounded mb-6">
-<option>motivational</option>
-<option>educational</option>
-<option>funny</option>
-<option>inspirational</option>
+<label>Tone</label>
+<select id="tone" class="w-full border p-2 mb-4 rounded">
+<option value="motivational">motivational</option>
+<option value="funny">funny</option>
+<option value="inspirational">inspirational</option>
+<option value="professional">professional</option>
 </select>
 
-<button onclick="generateCaption()" 
-class="bg-blue-600 text-white px-4 py-2 rounded w-full">
+<button onclick="generateCaption()" class="bg-blue-600 text-white w-full p-3 rounded mb-2">
 Generate Caption
 </button>
 
-<button onclick="generateReel()" 
-class="bg-purple-600 text-white px-4 py-2 rounded w-full mt-4">
+<button onclick="generateReel()" class="bg-purple-600 text-white w-full p-3 rounded mb-2">
 Generate Reel Script
 </button>
 
-<button onclick="generateCalendar()" 
-class="bg-green-600 text-white px-4 py-2 rounded w-full mt-4">
+<button onclick="generateCalendar()" class="bg-green-600 text-white w-full p-3 rounded mb-4">
 Generate Content Calendar
 </button>
 
-<div id="loading" class="hidden text-blue-600 mt-4 font-medium">
-Generating content...
-</div>
+<h3 class="font-semibold mb-2">Result</h3>
 
-<h2 class="text-xl font-semibold mt-6">Result</h2>
+<div id="result" class="bg-gray-100 p-4 rounded min-h-[120px]"></div>
 
-<div id="result" class="bg-gray-100 p-4 rounded mt-4 whitespace-pre-wrap min-h-[120px]"></div>
-
-<button onclick="copyResult()" 
-class="bg-gray-800 text-white px-4 py-2 rounded w-full mt-4">
+<button onclick="copyResult()" class="bg-gray-800 text-white w-full p-3 rounded mt-4">
 Copy Result
 </button>
 
 </div>
 
+
 <script>
+
+const API_URL = "https://instagram-ai-content-tool.onrender.com"
 
 async function generateCaption(){
 
-document.getElementById("loading").classList.remove("hidden")
-
 const niche = document.getElementById("niche").value
 const topic = document.getElementById("topic").value
 const tone = document.getElementById("tone").value
 
-const response = await fetch("https://instagram-ai-content-tool.onrender.com/generate_caption"),
-{
+const response = await fetch(`${API_URL}/generate_caption`,{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
 },
-body: JSON.stringify({
+body:JSON.stringify({
 niche:niche,
 topic:topic,
 tone:tone
@@ -81,26 +72,22 @@ tone:tone
 
 const data = await response.json()
 
-document.getElementById("loading").classList.add("hidden")
-document.getElementById("result").innerText = data.caption
-
+document.getElementById("result").innerText = data.result
 }
+
 
 async function generateReel(){
 
-document.getElementById("loading").classList.remove("hidden")
-
 const niche = document.getElementById("niche").value
 const topic = document.getElementById("topic").value
 const tone = document.getElementById("tone").value
 
-const response = await fetch("https://instagram-ai-content-tool.onrender.com/generate_reel")
-,{
+const response = await fetch(`${API_URL}/generate_reel`,{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
 },
-body: JSON.stringify({
+body:JSON.stringify({
 niche:niche,
 topic:topic,
 tone:tone
@@ -109,26 +96,22 @@ tone:tone
 
 const data = await response.json()
 
-document.getElementById("loading").classList.add("hidden")
-document.getElementById("result").innerText = data.reel_script
-
+document.getElementById("result").innerText = data.result
 }
+
 
 async function generateCalendar(){
 
-document.getElementById("loading").classList.remove("hidden")
-
 const niche = document.getElementById("niche").value
 const topic = document.getElementById("topic").value
 const tone = document.getElementById("tone").value
 
-const response = await fetch("https://instagram-ai-content-tool.onrender.com/generate_calendar")
-,{
+const response = await fetch(`${API_URL}/generate_calendar`,{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
 },
-body: JSON.stringify({
+body:JSON.stringify({
 niche:niche,
 topic:topic,
 tone:tone
@@ -137,10 +120,9 @@ tone:tone
 
 const data = await response.json()
 
-document.getElementById("loading").classList.add("hidden")
-document.getElementById("result").innerText = data.calendar
-
+document.getElementById("result").innerText = data.result
 }
+
 
 function copyResult(){
 
